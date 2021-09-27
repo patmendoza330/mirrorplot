@@ -3,42 +3,49 @@
 library(ggplot2)
 library(ggrepel)
 library("rstudioapi")
+
+# BEGIN Enter your variables here
+
+filename <- "mirrorplot.png" # your local image created
+sample.type1 <- c("Root", "Stem", "Leaf") # types of samples for RNA-seq
+regulation.type1 <- c("Upregulated", "Downregulated")
+# below are the values for each of your sample types in the order 
+# that they appear above, upregulated genes are entered first and positive,
+# downregulated genes are second and negative
+sample.values1 <- c(500, -300, 200, -50, 200, -30) 
+bar.fill1 <- c("white", "black") # upregulated genes will have a white bar
+# downregulated genes will generally appear black
+
+# END Enter your variables here
+
+# block of code to create a path and filename for your impage output
 wd <- rstudioapi::getSourceEditorContext()$path
 wd1 <- strsplit(wd, "/")
 wd1 <- paste0(wd1[[1]][1:lengths(wd1)-1], collapse = "/")
+filename1 <- paste0(wd1, '/' , filename)
 
-filename1 <- paste0(wd1, '/mirrorplot.png')
-
-# Lets put together the table that will be used as the basis for our chart
-
-sample.type1 <- c("Root", "Stem", "Leaf")
-regulation.type1 <- c("Upregulated", "Downregulated")
-sample.values1 <- c(500, -300, 200, -50, 200, -30) # These correspond with 
-# the values that will be included for each of your 
-# samples. You will have one positive and one negative number for each. 
-# In this case, since we have two categories, there will be four numbers
-# included.
-bar.fill1 <- c("white", "black")
-# because the labels will be the opposite of the fill colors we only need
-# to reverse the order fo the fill
-label.text.color1 <- rev(bar.fill)
+# The labels will be the opposite of the fill colors, since we chose black
+# and white, we only need to reverse the order of the fill
+label.text.color1 <- rev(bar.fill1)
 
 dat1 <- data.frame(sample.type=rep(sample.type1, each = 2), 
                   # we want all categories listed twice (up/down)
                   regulation.type = regulation.type1,
                   # regulation types will be repeated for all samples
-                  y = sample.values, 
+                  y = sample.values1, 
                   # enter the samples
                   bar.fill = bar.fill1, 
                   label.text.color = label.text.color1, 
                   stringsAsFactors = FALSE)
-dat1$regulation.type <- factor(dat1$regulation.type, levels = regulation.type)
+dat1$regulation.type <- factor(dat1$regulation.type, levels = regulation.type1)
 dat1$sample.type <- factor(dat1$sample.type, levels = sample.type1)
-# this ensures that the order of the regulation types appears as we have 
-# entered it into the dataframe in the ggplot
-y.lab <- "Number of Genes"
-maxnum <- max(sample.values)
-# grab the maximum number of the sample values for use later
+# this ensures that the order of the regulation types and sample types 
+# appears as we have entered them into the dataframe. ggplot will order them 
+# alphabetically, unless we specify otherwise
+y.lab <- "Number of Genes" # the label for the y axis
+maxnum <- max(sample.values1) 
+# this grabs the maximum of the sample values and is more important when
+# placing the labels. 
 
 png(filename1, height = 1200, width = 1200)
 p <- ggplot(dat1, aes(x=sample.type, y=y, fill=regulation.type, label=abs(y))) + 
@@ -70,5 +77,5 @@ p <- ggplot(dat1, aes(x=sample.type, y=y, fill=regulation.type, label=abs(y))) +
   # Increase the size of the plot so that it can encompass the labels that
   # were added
   scale_y_continuous(expand=expansion(mult=c(.10,.10)))
-print(p)
+p
 dev.off()
