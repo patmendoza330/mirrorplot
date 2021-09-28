@@ -124,6 +124,7 @@ As a finishing touch, lets add a horizontal line and call it a day!
 ```
 p <- p + geom_hline(yintercept=0, color="black", size=2)
 ```
+<img src="images/plot4.png" alt="Final Plot" width=400>
 
 ![Final Plot](images/plot4.png)
 
