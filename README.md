@@ -36,10 +36,11 @@ Then we want to setup two lists that contain the fill colors to be used in the p
 regulation.type1 <- c("Upregulated", "Downregulated")
 bar.fill1 <- c("white", "black")
 label.text.color1 <- rev(bar.fill1)
-maxnum <- max(sample.values1) 
+maxnum <- max(sample.values1)
+y.lab <- "Number of Genes" 
 ```
 
-The text fill color will simply be the reversed values of the fill color since we want these to show up against the fill colors. The variable that I've setup as the `maxnum` for the dataset has an impact on the placement for the up/down regulation labels
+The text fill color will simply be the reversed values of the fill color since we want these to show up against the fill colors. The variable that I've setup as the `maxnum` for the dataset has an impact on the placement for the up/down regulation labels, and the y.lab is the label that will be used for the y axis.
 
 Now, we can finally setup our dataframe
 
