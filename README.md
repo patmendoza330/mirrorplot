@@ -82,6 +82,7 @@ The x axis is using our `sample.type`, the y axis the number of genes that are r
 Additionally, the type of chart is specified as a `geom_bar` and a black border.  
 
 Running the code produces this plot:
+
 <img src="images/plot1.png" alt="First Plot" width=400>
 
 Now, there are several things that we need to do to this plot to make it appear as we'd like:
@@ -106,6 +107,7 @@ p <- p + scale_fill_manual(values = dat1$bar.fill) +
 ```
 
 Produces the following on a 1200x1200 plot:
+
 <img src="images/plot2.png" alt="Second Plot" width=400>
 
 We're getting close, but you can see that we still have to add the vertical up/downregulation label, and the chart cuts off the labels for some of the larger values. We can fix that with:
