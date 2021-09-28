@@ -2,7 +2,7 @@
 
 Throughout the process of running an RNA-seq, you may be asked to graphically represent total number of genes that are upregulated and downregulated. The mirror plot allows you to do that and has a nifty little graphic that can include in presentations:
 
-![Completed Mirrorplot](images/mirrorplot.png)
+<img src="images/mirrorplot.png" alt="Completed MirrorPlot" width=400>
 
 This is created with ggplot2 and labels using ggrepel. 
 
@@ -82,7 +82,7 @@ The x axis is using our `sample.type`, the y axis the number of genes that are r
 Additionally, the type of chart is specified as a `geom_bar` and a black border.  
 
 Running the code produces this plot:
-![First Plot](images/plot1.png)
+<img src="images/plot1.png" alt="First Plot" width=400>
 
 Now, there are several things that we need to do to this plot to make it appear as we'd like:
 
@@ -106,7 +106,7 @@ p <- p + scale_fill_manual(values = dat1$bar.fill) +
 ```
 
 Produces the following on a 1200x1200 plot:
-![Second Plot](images/plot2.png)
+<img src="images/plot2.png" alt="Second Plot" width=400>
 
 We're getting close, but you can see that we still have to add the vertical up/downregulation label, and the chart cuts off the labels for some of the larger values. We can fix that with:
 
@@ -117,7 +117,7 @@ p <- p + annotate(geom="text", x=.45, y=.02*maxnum, label=regulation.type1[1],
            color="black", angle=90, fontface="italic", size=12, hjust =1) + 
   scale_y_continuous(expand=expansion(mult=c(.10,.10)))
 ```
-![Third Plot](images/plot3.png)
+<img src="images/plot3.png" alt="Third Plot" width=400>
 
 As a finishing touch, lets add a horizontal line and call it a day!
 
@@ -125,6 +125,4 @@ As a finishing touch, lets add a horizontal line and call it a day!
 p <- p + geom_hline(yintercept=0, color="black", size=2)
 ```
 <img src="images/plot4.png" alt="Final Plot" width=400>
-
-![Final Plot](images/plot4.png)
 
