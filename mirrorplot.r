@@ -5,28 +5,22 @@ library(ggrepel)
 library("rstudioapi")
 
 # BEGIN Enter your variables here
-
-filename <- "mirrorplot.png" # your local image created
 sample.type1 <- c("Root", "Stem", "Leaf") # types of samples for RNA-seq
-regulation.type1 <- c("Upregulated", "Downregulated")
-# below are the values for each of your sample types in the order 
-# that they appear above, upregulated genes are entered first and positive,
-# downregulated genes are second and negative
 sample.values1 <- c(500, -300, 200, -50, 200, -30) 
+regulation.type1 <- c("Upregulated", "Downregulated")
 bar.fill1 <- c("white", "black") # upregulated genes will have a white bar
 # downregulated genes will generally appear black
-
 # END Enter your variables here
+label.text.color1 <- rev(bar.fill1)
+y.lab <- "Number of Genes" # the label for the y axis
+maxnum <- max(sample.values1) 
 
 # block of code to create a path and filename for your impage output
+filename <- "mirrorplot.png" # your local image created
 wd <- rstudioapi::getSourceEditorContext()$path
 wd1 <- strsplit(wd, "/")
 wd1 <- paste0(wd1[[1]][1:lengths(wd1)-1], collapse = "/")
 filename1 <- paste0(wd1, '/' , filename)
-
-# The labels will be the opposite of the fill colors, since we chose black
-# and white, we only need to reverse the order of the fill
-label.text.color1 <- rev(bar.fill1)
 
 dat1 <- data.frame(sample.type=rep(sample.type1, each = 2), 
                   # we want all categories listed twice (up/down)
@@ -42,10 +36,6 @@ dat1$sample.type <- factor(dat1$sample.type, levels = sample.type1)
 # this ensures that the order of the regulation types and sample types 
 # appears as we have entered them into the dataframe. ggplot will order them 
 # alphabetically, unless we specify otherwise
-y.lab <- "Number of Genes" # the label for the y axis
-maxnum <- max(sample.values1) 
-# this grabs the maximum of the sample values and is more important when
-# placing the labels. 
 
 png(filename1, height = 1200, width = 1200)
 p <- ggplot(dat1, aes(x=sample.type, y=y, fill=regulation.type, label=abs(y))) + 
