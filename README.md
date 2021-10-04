@@ -1,12 +1,16 @@
 # Creating a mirrorplot in R
 
-Throughout the process of running an RNA-seq, you may be asked to graphically represent total number of genes that are upregulated and downregulated. The mirror plot allows you to do that and has a nifty little graphic that can include in presentations:
+Throughout the process of running an RNA-seq, you may be asked to graphically represent total number of genes that are upregulated and downregulated. A mirror plot allows you to do just that and can be included in presentations:
 
 <img src="images/mirrorplot.png" alt="Completed MirrorPlot" width=400>
 
-This is created with ggplot2 and labels using ggrepel. 
+This is created with ggplot2 and labels are added using ggrepel. 
 
 Lets get into the specifics below.
+
+## Running from the files in repository
+
+If you want to run from the files in the repository, download the [mirrorplot.r](https://github.com/patmendoza330/mirrorplot/blob/main/mirrorplot.r) file and run. It will create a mirror plot according to the parameters shown below.
 
 ## Installing libraries
 
@@ -33,14 +37,14 @@ sample.values1 <- c(500, -300, 200, -50, 200, -30)
 Then we want to setup two lists that contain the fill colors to be used in the plot as well as the text that is going to be displayed vertically. 
 
 ```
-regulation.type1 <- c("Upregulated", "Downregulated")
 bar.fill1 <- c("white", "black")
+regulation.type1 <- c("Upregulated", "Downregulated")
 label.text.color1 <- rev(bar.fill1)
 maxnum <- max(sample.values1)
 y.lab <- "Number of Genes" 
 ```
 
-The text fill color will simply be the reversed values of the fill color since we want these to show up against the fill colors. The variable that I've setup as the `maxnum` for the dataset has an impact on the placement for the up/down regulation labels, and the y.lab is the label that will be used for the y axis.
+The text color will simply be the reversed values of the fill color since we want these to show up against the fill colors. The variable that I've setup as the `maxnum` for the dataset has an impact on the placement for the up/down regulation labels, and the y.lab is the label that will be used for the y axis.
 
 Now, we can finally setup our dataframe
 
@@ -107,7 +111,7 @@ p <- p + scale_fill_manual(values = dat1$bar.fill) +
   theme(legend.position = "none")
 ```
 
-Produces the following on a 1200x1200 plot:
+*Please note:* the size of the font has been optimized for a 1200x1200 plot. If you are running this in RStudio, be sure to adjust the export size, otherwise, text will appear abnormally large in the preview window. 
 
 <img src="images/plot2.png" alt="Second Plot" width=400>
 
@@ -128,4 +132,32 @@ As a finishing touch, lets add a horizontal line and call it a day!
 p <- p + geom_hline(yintercept=0, color="black", size=2)
 ```
 <img src="images/plot4.png" alt="Final Plot" width=400>
+
+## Conclusion
+
+Sometimes, labels are desired to be in the actual bar. However, after creating many of these for an RNA-seq I found that because of scaling issues between samples, the label doesn't always fit within the bar. Because of that, I'm using labels outside of the bar using ggrepel. 
+
+Additionally, the script does allow the flexibility to add many different tissue types, however, my personal script includes the up/downregulated counts and names of tissues in their own list which makes it a bit easier to understand the structure:
+
+```
+sample.type1 <- list()
+sample.type1[["Root"]] <- c(500,-300)
+sample.type1[["Stem"]] <- c(200,-50) 
+sample.type1[["Leaf"]] <- c(200,-30) 
+
+maxnum <- 0
+for (i in 1:length(sample.type1)){
+    maxnum <- max(maxnum, 
+    sample.type1[[i]])
+}
+```
+
+Then integrating them into a new dataframe using a loop:
+
+```
+for(i in 1:length(sample.type1)){
+	    intdf <- 	    data.frame(sample.type=rep(names(sample.type1[i]), 2), regulation.type=c("Upregulated", "Downregulated"), y=sample.type1[[i]], bar.fill = c("White", "Black"), label.text.color = c("Black","White"))
+	    dat <- rbind(dat, intdf)
+  }
+```
 
