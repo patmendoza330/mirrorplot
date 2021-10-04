@@ -2,7 +2,6 @@
 # used in RNA-seq analysis
 library(ggplot2)
 library(ggrepel)
-library("rstudioapi")
 
 # BEGIN Enter your variables here
 sample.type1 <- c("Root", "Stem", "Leaf") # types of samples for RNA-seq
@@ -17,10 +16,8 @@ maxnum <- max(sample.values1)
 
 # block of code to create a path and filename for your impage output
 filename <- "mirrorplot.png" # your local image created
-wd <- rstudioapi::getSourceEditorContext()$path
-wd1 <- strsplit(wd, "/")
-wd1 <- paste0(wd1[[1]][1:lengths(wd1)-1], collapse = "/")
-filename1 <- paste0(wd1, '/' , filename)
+wd <- getwd()
+filename1 <- paste0(wd, '/' , filename)
 
 dat1 <- data.frame(sample.type=rep(sample.type1, each = 2), 
                   # we want all categories listed twice (up/down)
